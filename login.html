@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+        <title>Login</title>
+
+        <style>
+
+
+            * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+
+
+            body { background: black; margin: 0; overflow: hidden; }
+
+
+            body { 
+                margin: 0; 
+                overflow: hidden;
+                /* Create a long gradient: Black -> Green -> Black */
+                background: linear-gradient(to bottom, #000, #000, #0F0, #000, #000);
+                background-size: 100% 400%; 
+                animation: flow 4s linear infinite;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+
+            /* This moves the background from top to bottom */
+            @keyframes flow {
+                0% { background-position: 0% 0%; }
+                100% { background-position: 0% 100%; }
+            } 
+        
+
+            .grid-container {
+                position: absolute;
+                display: grid; 
+                /* Adjust the 24 and 10 to change your grid size */
+                grid-template-columns: repeat(24, 100px);
+                grid-template-rows: repeat(10, 100px);
+                gap: 2px 2px;
+                column-gap: 2px;
+                row-gap: 2px;
+                margin:0px;
+                padding: 0px;
+                z-index: 1;
+            }
+
+            .cell { 
+                position: relative;
+                display: block;
+                padding: 0px;
+                margin: 0px;
+                width: 100px;
+                height: 100px;
+                background-color: #191919;
+                transition: 1.5s ease-out;
+            } 
+        
+            .cell:hover {
+                background: #0F0;
+                transition: 0s;
+            } 
+
+
+            /* The Login Box */
+            .signin {
+                position: absolute;
+                width: 400px;
+                background: #222;
+                z-index: 1000; /* Keeps form above the background */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 40px;
+                border-radius: 4px;
+                box-shadow: 0 15px 35px rgba(0,0,0,0.9);
+                top: auto;
+                left: auto;
+            }
+        
+            h2 { color: #0f0; text-transform: uppercase; margin-bottom: 20px; }
+        
+            .inputBox { position: relative; width: 100%; margin-top: 20px; }
+
+            .inputBox input {
+                width: 100%;
+                padding: 10px;
+                background: #333;
+                border: none;
+                outline: none;
+                color: #fff;
+            }
+
+            .inputBox i { color: #888; font-style: normal; }
+            
+            .links{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .links a{
+                text-decoration: none;
+                color: #0F0;
+            }
+
+            #fp{
+                padding: 10px;
+            }
+
+            #su{
+                padding: 10px;
+            }
+
+            
+        </style>
+
+    </head>
+
+
+    <body>
+
+        <div id="grid" class="grid-container"></div> 
+        
+
+        <div class="signin">
+            
+            <div class="content">
+                
+                <h2>Sign In</h2>
+                
+                <div class="form">
+                    <div class="inputBox">
+                        <i>Username</i>
+                        <input type="text" required>
+                    </div>
+
+                    <div class="inputBox">
+                        <i>Password</i>
+                        <input type="password" required>
+                    </div>
+
+                    <div class="links">
+                        <a href="#" id="fp">Forgot Password</a>
+                        <a href="#" id="su">Sign up</a>
+                    </div>
+
+                    <div class="inputBox">
+                        <input type="submit" value="Login" style="background: #0f0; color: #000; font-weight: bold; cursor: pointer;"  >
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <script>
+        
+        const grid = document.getElementById('grid');
+        // This loop creates 240 cells (24 columns * 10 rows)
+        for (let i = 0; i < 240; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            grid.appendChild(cell);
+        }
+
+    </script>
+
+    </body>
+
+</html>
