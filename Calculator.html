@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: antiquewhite;
+        }
+
+        .calculator {
+            background-color: lightpink;
+            padding: 20px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px bisque;
+            width: 320px;
+        }
+
+        .display {
+            background-color: antiquewhite;
+            color: deeppink;
+            font-size: 2.5rem;
+            text-align: right;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+            min-height: 80px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        button {
+            padding: 20px;
+            font-size: 1.25rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            background-color: hotpink;
+            color: lightpink;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Operator buttons colored differently */
+        button.operator {
+            background-color: lightseagreen;
+            color: white;
+            font-weight: bold;
+        }
+
+        button.operator:hover {
+            background-color: lightseagreen;
+        }
+
+        /* Clear and delete buttons */
+        button.function {
+            background-color: #a5a5a5;
+            color: black;
+        }
+
+        button.function:hover {
+            background-color: #8e8e8e;
+        }
+
+        /* Equal button takes up two columns */
+        button.equal {
+            grid-column: span 2;
+            background-color: lightsteelblue;
+            color: white;
+        }
+
+        button.equal:hover {
+            background-color: slateblue;
+        }
+
+        button:hover:not(.operator):not(.function):not(.equal) {
+            background-color: #3e3e46;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+
+        <div class="buttons">
+            <button class="function" onclick="clearDisplay()">C</button>
+            <button class="function" onclick="deleteLast()">DEL</button>
+            <button class="operator" onclick="appendOperator('%')">%</button>
+            <button class="operator" onclick="appendOperator('/')">/</button>
+
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button class="operator" onclick="appendOperator('*')">*</button>
+
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button class="operator" onclick="appendOperator('-')">-</button>
+
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button class="operator" onclick="appendOperator('+')">+</button>
+
+            <button onclick="appendNumber('0')">0</button>
+            <button onclick="appendNumber('.')">.</button>
+            <button class="equal" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+        let currentInput = '0';
+        let shouldResetDisplay = false;
+
+        function updateDisplay() {
+            display.innerText = currentInput;
+        }
+
+        function appendNumber(number) {
+            if (currentInput === '0' || shouldResetDisplay) {
+                currentInput = number;
+                shouldResetDisplay = false;
+            } else {
+                // Prevent multiple decimals in one number segment
+                if (number === '.' && currentInput.split(/[\+\-\*\/%]/).pop().includes('.')) {
+                    return;
+                }
+                currentInput += number;
+            }
+            updateDisplay();
+        }
+
+        function appendOperator(operator) {
+            if (shouldResetDisplay) shouldResetDisplay = false;
+            
+            const lastChar = currentInput.slice(-1);
+            // If the last character is already an operator, replace it
+            if (['+', '-', '*', '/', '%'].includes(lastChar)) {
+                currentInput = currentInput.slice(0, -1) + operator;
+            } else {
+                currentInput += operator;
+            }
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            currentInput = '0';
+            updateDisplay();
+        }
+
+        function deleteLast() {
+            if (currentInput.length > 1) {
+                currentInput = currentInput.slice(0, -1);
+            } else {
+                currentInput = '0';
+            }
+            updateDisplay();
+        }
+
+        function calculate() {
+            try {
+                // Using Function instead of eval for basic safety handling
+                let result = new Function(`return ${currentInput}`)();
+                
+                // Handle division by zero or invalid results
+                if (result === Infinity || isNaN(result)) {
+                    currentInput = 'Error';
+                } else {
+                    // Limit float precision to 8 decimal places
+                    currentInput = Number(result.toFixed(8)).toString();
+                }
+                shouldResetDisplay = true;
+            } catch (error) {
+                currentInput = 'Error';
+                shouldResetDisplay = true;
+            }
+            updateDisplay();
+        }
+    </script>
+
+</body>
+</html>
